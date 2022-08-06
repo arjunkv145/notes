@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { useEffect } from 'react'
 
 const StyledNotesContainer = styled.div`
-    margin-top: 60px;
+    margin-top: 65px;
 `
 const StyledNoteContainer = styled.div`
     background-color: #F9F5EB;
@@ -59,6 +59,7 @@ const StyledCreateButton = styled.button`
     width: ${props => props.width};
     padding: .5rem 0;
     font-family: inherit;
+    font-size: 1rem;
     background-color: #C4D7E0;
     color: #303030;
     border: none;
@@ -68,6 +69,10 @@ const StyledCreateButton = styled.button`
     &:hover {
         background-color: #B2C8DF;
     }
+    @media (max-width: 375px) {
+        font-size: .9rem;
+    }
+
 `
 const StyledSelectButton = styled(StyledCreateButton)`
     width: 48%;

@@ -6,6 +6,7 @@ const StyledBackButton = styled.button`
     width: 100px;
     padding: .5rem 0;
     font-family: inherit;
+    font-size: 1rem;
     background-color: #C4D7E0;
     color: #303030;
     border: none;
@@ -15,6 +16,9 @@ const StyledBackButton = styled.button`
     &:hover {
         background-color: #B2C8DF;
     }
+    @media (max-width: 375px) {
+        font-size: .9rem;
+    }
 `
 
 const StyledTextArea = styled.textarea`
@@ -22,6 +26,7 @@ const StyledTextArea = styled.textarea`
     margin-top: 1em;
     padding: 1em;
     font-family: inherit;
+    font-size: 1rem;
     background: none;
     color: #F9F5EB;
     border: none;

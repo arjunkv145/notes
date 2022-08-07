@@ -132,14 +132,14 @@ export default function Notes({ notes, dispatch }) {
                     }
                     onClick={() => dispatch({ type: "CREATE NEW NOTE" })}
                 >
-                    new note
+                    Add note
                 </StyledCreateButton>
                 {
                     notesList.length > 0 && (
                         selectWindow ?
-                        <StyledSelectButton onClick={() => dispatch({ type: "UNSELECT WINDOW" })}>unselect</StyledSelectButton>
+                        <StyledSelectButton onClick={() => dispatch({ type: "UNSELECT WINDOW" })}>Unselect</StyledSelectButton>
                         :
-                        <StyledSelectButton onClick={() => dispatch({ type: "SELECT WINDOW" })}>select</StyledSelectButton>
+                        <StyledSelectButton onClick={() => dispatch({ type: "SELECT WINDOW" })}>Select</StyledSelectButton>
                     )
                 }
             </StyledFlex>
@@ -153,7 +153,7 @@ export default function Notes({ notes, dispatch }) {
             }
             <StyledNotesContainer>
                 { selectWindow ? selectWindowHtml : notesHtml }
-                { notesHtml.length === 0 && <StyledEmptyText>Add a new note</StyledEmptyText> }
+                { notesHtml.length === 0 && <StyledEmptyText>No notes</StyledEmptyText> }
             </StyledNotesContainer>
         </>
     )

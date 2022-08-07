@@ -1,5 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { useReducer } from 'react'
+import { useReducer, useEffect } from 'react'
 import styled from 'styled-components'
 import uuid from 'react-uuid'
 import './App.css'
@@ -8,7 +7,9 @@ import Note from './Note'
 
 const initialNotes = {
   selectWindow: false,
-  notesList: []
+  notesList: [],
+  page: 'Home',
+  editNoteId: ''
 }
 
 const reducer = (state, action) => {
@@ -55,19 +56,24 @@ const reducer = (state, action) => {
         return { ...state, selectWindow: false, notesList: modifiedNotes }
 
       case 'CREATE NEW NOTE':
-        notesListData = JSON.parse(localStorage.getItem('notes'))
         const id = uuid()
         const newNote = { id: id, content: "", selected: false }
-        modifiedNotes = []
-        if (notesListData === null) {
-          modifiedNotes = [newNote]
-          localStorage.setItem('notes', JSON.stringify(modifiedNotes))
+        modifiedNotes = [newNote, ...state.notesList]
+        localStorage.setItem('notes', JSON.stringify(modifiedNotes))
+
+        return {
+          ...state,
+          notesList: modifiedNotes,
+          selectWindow: false,
+          page: 'Edit',
+          editNoteId: id
         }
-        else if (Array.isArray(notesListData)) {
-          modifiedNotes = [newNote, ...notesListData]
-          localStorage.setItem('notes', JSON.stringify(modifiedNotes))
-        }
-        return { ...state, notesList: modifiedNotes, selectWindow: false }
+
+      case 'OPEN NOTE':
+        return { ...state, page: 'Edit', editNoteId: action.id }
+
+      case 'GO TO HOME':
+        return { ...state, page: 'Home', editNoteId: '' }
 
       case 'UPDATE CURRENT NOTE':
         notesListData = state.notesList.filter(n => n.id !== action.id)
@@ -85,6 +91,7 @@ const reducer = (state, action) => {
 
 const StyledContainer = styled.div`
   background-color: #6E85B7;
+  border-radius: 4px;
   width: 100%;
   max-width: 600px;
   margin: 50px auto;
@@ -106,16 +113,20 @@ const StyledHeader = styled.h1`
 function App() {
   const [notes, dispatch] = useReducer(reducer, initialNotes)
 
+  useEffect(() => {
+    dispatch({ type: 'FETCHING DATA FROM STORAGE' })
+  }, [dispatch])
+
   return (
-    <Router>
-      <StyledContainer>
-        <StyledHeader>Notes</StyledHeader>
-        <Routes>
-          <Route path="/notes" element={<Notes notes={notes} dispatch={dispatch}/>} />
-          <Route path="/notes/note/:id" element={<Note notes={notes} dispatch={dispatch}/>} />
-        </Routes>
-      </StyledContainer>
-    </Router>
+    <StyledContainer>
+      <StyledHeader>Notes</StyledHeader>
+      {
+        notes.page === 'Home' && <Notes notes={notes} dispatch={dispatch}/>
+      }
+      {
+        notes.page === 'Edit' && <Note notes={notes} dispatch={dispatch}/>
+      }
+    </StyledContainer>
   );
 }
 

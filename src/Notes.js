@@ -1,6 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
-import { useEffect } from 'react'
 
 const StyledNotesContainer = styled.div`
     margin-top: 65px;
@@ -94,26 +92,15 @@ const StyledEmptyText = styled.p`
 
 export default function Notes({ notes, dispatch }) {
     const { selectWindow, notesList } = notes
-    const navigate = useNavigate()
-
-    useEffect(() => {
-        dispatch({ type: 'FETCHING DATA FROM STORAGE' })
-    }, [dispatch])
 
     const notesHtml = notesList.map(note => (
-        <Link 
-            to={`/notes/note/${note.id}`} 
-            key={note.id}
-            style={{ textDecoration: 'none' }}
-        >
-            <StyledNoteContainer>
-                <StyledNoteContent>
-                    {
-                        note.content.trim().length === 0 ? '( EMPTY NOTE )' : note.content
-                    }
-                </StyledNoteContent>
-            </StyledNoteContainer>
-        </Link>
+        <StyledNoteContainer key={note.id} onClick={() => dispatch({ type: 'OPEN NOTE', id: note.id })}>
+            <StyledNoteContent>
+                {
+                    note.content.trim().length === 0 ? '( EMPTY NOTE )' : note.content
+                }
+            </StyledNoteContent>
+        </StyledNoteContainer>
     ))
 
     const selectWindowHtml = notesList.map(note => (
@@ -136,11 +123,6 @@ export default function Notes({ notes, dispatch }) {
         )
     )
 
-    const createNewNote = () => {
-        dispatch({ type: "CREATE NEW NOTE" })
-        navigate(`/notes/note/new`)
-    }
-
     return (
         <>
             <StyledFlex>
@@ -148,7 +130,7 @@ export default function Notes({ notes, dispatch }) {
                     width={
                         notesList.length > 0 ? '48%' : '100%'
                     }
-                    onClick={createNewNote}
+                    onClick={() => dispatch({ type: "CREATE NEW NOTE" })}
                 >
                     new note
                 </StyledCreateButton>

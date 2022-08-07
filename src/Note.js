@@ -1,5 +1,4 @@
 import { useRef, useEffect } from 'react'
-import { Link, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
 const StyledBackButton = styled.button`
@@ -39,9 +38,8 @@ const StyledTextArea = styled.textarea`
 `
 
 export default function Note({ notes, dispatch }) {
-    const { id } = useParams()
     const input = useRef(null)
-    const { notesList } = notes
+    const { notesList, editNoteId } = notes
     let textArea
 
     useEffect(() => {
@@ -50,11 +48,7 @@ export default function Note({ notes, dispatch }) {
         }
     })
 
-    if (id === 'new') {
-        textArea = notesList[0]
-    } else {
-        textArea = notesList.find(n => n.id === id)
-    }
+    textArea = notesList.find(n => n.id === editNoteId)
 
     const changeHeight = e => {
         e.target.style.height = 'inherit'
@@ -63,9 +57,7 @@ export default function Note({ notes, dispatch }) {
 
     return (
         <div>
-            <Link to='/notes'>
-                <StyledBackButton>Go back</StyledBackButton>
-            </Link>
+            <StyledBackButton onClick={() => dispatch({ type: 'GO TO HOME' })}>Go back</StyledBackButton>
             <StyledTextArea
                 value={textArea.content} 
                 ref={input}

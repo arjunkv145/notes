@@ -13,7 +13,7 @@ const initialNotes = {
 }
 
 const reducer = (state, action) => {
-  let notesListData, modifiedNotes
+  let notesListData, modifiedNotes, currentNote
   switch (action.type) {
       case 'FETCHING DATA FROM STORAGE':
           notesListData = JSON.parse(localStorage.getItem('notes'))
@@ -73,11 +73,17 @@ const reducer = (state, action) => {
         return { ...state, page: 'Edit', editNoteId: action.id }
 
       case 'GO TO HOME':
+        currentNote = state.notesList.find(n => n.id === state.editNoteId)
+        if (currentNote.content.trim().length === 0) {
+          modifiedNotes = state.notesList.filter(n => n.id !== state.editNoteId)
+          localStorage.setItem('notes', JSON.stringify(modifiedNotes))
+          return { ...state, page: 'Home', editNoteId: '', notesList: modifiedNotes }
+        }
         return { ...state, page: 'Home', editNoteId: '' }
 
       case 'UPDATE CURRENT NOTE':
         notesListData = state.notesList.filter(n => n.id !== action.id)
-        const currentNote = state.notesList.find(n => n.id === action.id)
+        currentNote = state.notesList.find(n => n.id === action.id)
         const value = action.event.target.value
         const updatedNote = [{ ...currentNote, content: value }]
         modifiedNotes = [...updatedNote, ...notesListData]

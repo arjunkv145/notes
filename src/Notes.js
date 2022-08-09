@@ -96,9 +96,7 @@ export default function Notes({ notes, dispatch }) {
     const notesHtml = notesList.map(note => (
         <StyledNoteContainer key={note.id} onClick={() => dispatch({ type: 'OPEN NOTE', id: note.id })}>
             <StyledNoteContent>
-                {
-                    note.content.trim().length === 0 ? '( EMPTY NOTE )' : note.content
-                }
+                {note.content}
             </StyledNoteContent>
         </StyledNoteContainer>
     ))
@@ -114,9 +112,7 @@ export default function Notes({ notes, dispatch }) {
                 </StyledWrapper>
                 <StyledNoteSelectContainer>
                     <StyledNoteContent>
-                        {
-                            note.content.trim().length === 0 ? '( EMPTY NOTE )' : note.content
-                        }
+                        {note.content}
                     </StyledNoteContent>
                 </StyledNoteSelectContainer>
             </StyledFlex>
